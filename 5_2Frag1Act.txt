@@ -1,0 +1,223 @@
+MainActivity.java
+
+package com.example.exp5;
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+public class MainActivity extends AppCompatActivity {
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+       FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+       fragmentTransaction.replace(R.id.MainLayout,new Fragment1());
+       fragmentTransaction.commit();
+   }
+}
+------------------------------------
+activity_main.xml 
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:id="@+id/MainLayout"
+   tools:context=".MainActivity">
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+------------------------------------
+Fragment1.java 
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+public class Fragment1 extends Fragment {
+   EditText txt1,txt2;
+   Button b1;
+   @Override
+   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanced)
+   {
+       View view =  inflater.inflate(R.layout.activity_fragment1,container,false);
+       txt1=view.findViewById(R.id.txt1);
+       txt2=view.findViewById(R.id.txt2);
+       b1=view.findViewById(R.id.button);
+
+       b1.setOnClickListener(view1 -> {
+           String F_name = txt1.getText().toString();
+           String L_name  = txt2.getText().toString();
+
+          Bundle bundle = new Bundle();
+          bundle.putString("first",F_name);
+          bundle.putString("last",L_name);
+
+           Fragment2 fragInfo = new Fragment2();
+           fragInfo.setArguments(bundle);
+           FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
+           fragmentTransaction.replace(R.id.MainLayout,fragInfo);
+           fragmentTransaction.commit();
+
+           b1.setOnClickListener(view2 -> {
+
+           });
+       });
+       return view;
+   }
+}
+------------------------------------
+activity_fragment1.xml 
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".Fragment1">
+
+   <TextView
+       android:id="@+id/textView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="This a First Fragment"
+       android:textColor="#000"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.498"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.139" />
+
+   <EditText
+       android:id="@+id/txt1"
+       android:layout_width="312dp"
+       android:layout_height="55dp"
+       android:hint="enter your first name"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.495"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.304" />
+
+   <EditText
+       android:id="@+id/txt2"
+       android:layout_width="312dp"
+       android:layout_height="55dp"
+       android:hint="enter your last name"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.494"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.465" />
+   
+   <Button
+       android:id="@+id/button"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="Submit"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.632" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+------------------------------------
+Fragment2.java 
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+public class Fragment2 extends Fragment {
+
+   @Override
+   public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanced)
+   {
+       View view = inflater.inflate(R.layout.activity_fragment2,container,false);
+       Bundle bundle = getArguments();
+
+       if(bundle!=null)
+       {
+           String first = bundle.getString("first");
+           String last = bundle.getString("last");
+
+           TextView first1 = view.findViewById(R.id.txt1);
+           TextView last1 = view.findViewById(R.id.txt2);
+
+           first1.setText(first);
+           last1.setText(last);
+       }
+       return view;
+   }
+}
+------------------------------------
+activity_fragment2.xml 
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".Fragment2">
+
+   <TextView
+       android:id="@+id/textView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="This a Second Fragment"
+       android:textColor="#000"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.498"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.139" />
+
+   <TextView
+       android:id="@+id/txt1"
+       android:layout_width="312dp"
+       android:layout_height="55dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.495"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.304" />
+
+   <TextView
+       android:id="@+id/txt2"
+       android:layout_width="312dp"
+       android:layout_height="55dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.494"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.465" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

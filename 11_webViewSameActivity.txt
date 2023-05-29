@@ -1,0 +1,70 @@
+MainActivity.java
+import androidx.appcompat.app.AppCompatActivity;
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
+
+public class MainActivity extends AppCompatActivity {
+    Button submit;
+    EditText editText;
+    WebView webView;
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editText = findViewById(R.id.link);
+        submit = findViewById(R.id.submit);
+        webView = findViewById(R.id.web);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String link = String.valueOf(editText.getText());
+                webView.loadUrl(link);
+                webView.setWebViewClient(new WebViewClient());
+            }
+        });
+    }
+    public void onBackPressed(){
+        webView = findViewById(R.id.web);
+        if(webView.canGoBack()){
+            webView.goBack();
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+}
+------------------------------------
+activity_main.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/link"
+        android:hint="Enter the URL using prefic https or http"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submit"
+        android:text="Submit"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/web"
+        />
+</LinearLayout>
